@@ -1,6 +1,6 @@
 # An introduction to AI in Node.js
 
-This directory contains source code for exercises from the 'Getting Started' tutorial.
+This directory contains source code for exercises from the 'Introduction to AI in Node.js' tutorial.
 
 ## Contents
 
