@@ -4,7 +4,7 @@ This directory contains source code for exercises from the 'Building a machine l
 
 ## Contents
 
-**[nodered-dev](./nodered-dev**: Development environment for creating a custom Node-RED node. Contains a
+**[nodered-dev](./nodered-dev)**: Development environment for creating a custom Node-RED node. This contains a
 sample [flow](./nodered-dev/flows.json) that uses the custom node.
 
 **[nodered-dev/node-red-contrib-tfjs-tutorial](./nodered-dev/node-red-contrib-tfjs-tutorial)** - The node package
