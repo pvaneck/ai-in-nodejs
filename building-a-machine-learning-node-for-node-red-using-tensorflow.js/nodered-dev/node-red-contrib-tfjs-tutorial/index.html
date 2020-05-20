@@ -1,0 +1,38 @@
+<script type="text/html" data-template-name="tfjs-tutorial-node">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+  <div class="form-row">
+    <label for="node-input-modelUrl"><i class="fa fa-globe"></i> Model Url</label>
+    <input type="text" id="node-input-modelUrl" placeholder="https://modelurl/model.json">
+  </div>
+  <div class="form-row">
+    <label for="node-input-fromHub">Is TFHub?</label>
+    <input type="checkbox" id="node-input-fromHub" checked>
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('tfjs-tutorial-node', {
+    category: 'machine learning',
+    defaults: {
+      name: { value: 'tfjs tutorial node' },
+      modelUrl: { value: 'https://tfhub.dev/tensorflow/tfjs-model/ssdlite_mobilenet_v2/1/default/1' },
+      fromHub: { value: 'checked' }
+    },
+    inputs: 1,
+    outputs: 1,
+    paletteLabel: 'tfjs tutorial node',
+    color: '#ff9100',
+    label: function() {
+      return this.name || 'tfjs tutorial node';
+    }
+  });
+</script>
+
+<script type="text/html" data-help-name="tfjs-tutorial-node">
+  <p>A TensorFlow.js node to run prediction using the Coco SSD model for object detection.</p>
+  <p>Provide a <strong>Model Url</strong> and indicate whether the URL points to a TFHub hosted model.</p>
+  <p>The node accepts a image buffer and outputs a JSON prediction object with detected objects and their bounding box and confidence score.</p>
+</script>

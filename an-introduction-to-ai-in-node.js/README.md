@@ -1,6 +1,6 @@
 # An introduction to AI in Node.js
 
-This directory contains source code for exercises from the 'Introduction to AI in Node.js' tutorial.
+This directory contains source code for exercises from the [Introduction to AI in Node.js](https://developer.ibm.com/tutorials/an-introduction-to-ai-in-nodejs/) tutorial.
 
 ## Contents
 

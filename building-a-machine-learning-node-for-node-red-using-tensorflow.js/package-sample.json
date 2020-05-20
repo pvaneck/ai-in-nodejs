@@ -1,0 +1,29 @@
+{
+  "name": "nodered-tfjs",
+  "version": "1.0.0",
+  "description": "A Node-RED application to use bert-tokenizer and bert-sentiment",
+  "main": "",
+  "scripts": {
+    "start": "node-red flow.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/username/nodered-tfjs.git"
+  },
+  "author": "User Name",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/username/nodered-tfjs/issues"
+  },
+  "homepage": "https://github.com/username/nodered-tfjs#readme",
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^1.6.0",
+    "node-red": "^1.0.1",
+    "node-red-contrib-bert-tokenizer": "^1.0.2",
+    "node-red-contrib-tf-function": "^0.1.0",
+    "node-red-contrib-tf-model": "^0.1.4",
+    "node-red-dashboard": "^2.19.4",
+    "node-red-node-twitter": "^1.1.6",
+    "twitter": "^1.7.1"
+  }
+}

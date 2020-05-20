@@ -1,6 +1,6 @@
 # An introduction to AI in Node.js
 
-This directory contains source code for exercises from the 'Coding a deep learning model using TensorFlow.js'
+This directory contains source code for exercises from the [Coding a deep learning model using TensorFlow.js](https://developer.ibm.com/technologies/artificial-intelligence/tutorials/coding-a-deep-learning-model-using-tensorflow-javascript/)
 tutorial.
 
 ## Contents

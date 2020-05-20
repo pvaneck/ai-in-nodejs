@@ -1,0 +1,16 @@
+{
+  "name": "nodered-dev",
+  "version": "0.0.1",
+  "description": "Project for Node-RED development",
+  "main": "index.js",
+  "scripts": {
+    "start": "node-red"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^1.7.2",
+    "node-red": "^1.0.4",
+    "node-red-contrib-tfjs-tutorial": "file:node-red-contrib-tfjs-tutorial"
+  }
+}

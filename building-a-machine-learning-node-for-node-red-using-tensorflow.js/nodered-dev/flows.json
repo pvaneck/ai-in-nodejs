@@ -1,0 +1,76 @@
+[
+    {
+        "id": "ed44bac9.6378a",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "32942f12.deac28",
+        "type": "tfjs-tutorial-node",
+        "z": "ed44bac9.6378a",
+        "name": "tfjs tutorial node",
+        "modelUrl": "https://tfhub.dev/tensorflow/tfjs-model/ssdlite_mobilenet_v2/1/default/1",
+        "fromHub": "checked",
+        "x": 497,
+        "y": 205,
+        "wires": [
+            [
+                "b2612289.039f4"
+            ]
+        ]
+    },
+    {
+        "id": "b2612289.039f4",
+        "type": "debug",
+        "z": "ed44bac9.6378a",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 699.5,
+        "y": 205,
+        "wires": []
+    },
+    {
+        "id": "dc828fcd.0f4f3",
+        "type": "file in",
+        "z": "ed44bac9.6378a",
+        "name": "Pilots.jpg",
+        "filename": "/Users/va/Desktop/max.test/test-images/Pilots.jpg",
+        "format": "",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 299,
+        "y": 206,
+        "wires": [
+            [
+                "32942f12.deac28"
+            ]
+        ]
+    },
+    {
+        "id": "a1533ba1.954df",
+        "type": "inject",
+        "z": "ed44bac9.6378a",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 126.5,
+        "y": 206,
+        "wires": [
+            [
+                "dc828fcd.0f4f3"
+            ]
+        ]
+    }
+]

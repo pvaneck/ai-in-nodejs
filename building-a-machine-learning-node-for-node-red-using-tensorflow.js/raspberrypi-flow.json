@@ -1,0 +1,304 @@
+[
+  {
+      "id": "4802ade.7e49e54",
+      "type": "tab",
+      "label": "Motion Object Detection",
+      "disabled": false,
+      "info": ""
+  },
+  {
+      "id": "c4f4c4ec.d967c8",
+      "type": "comment",
+      "z": "4802ade.7e49e54",
+      "name": "Trigger camera if motion is detected.",
+      "info": "If the motion sensor attached to the GPIO pins of the Raspberry Pi detects motion, the output will be 1. The switch node will trigger the camera if its input is 1.",
+      "x": 220,
+      "y": 80,
+      "wires": []
+  },
+  {
+      "id": "8ee4aff8.c8b1e",
+      "type": "usbcamera",
+      "z": "4802ade.7e49e54",
+      "filemode": "0",
+      "filename": "image01.jpg",
+      "filedefpath": "1",
+      "filepath": "",
+      "fileformat": "jpeg",
+      "resolution": "2",
+      "name": "",
+      "x": 350,
+      "y": 260,
+      "wires": [
+          [
+              "d5b62afe.3e4398",
+              "ebf49eab.6d3d6"
+          ]
+      ]
+  },
+  {
+      "id": "c151f116.c22c6",
+      "type": "inject",
+      "z": "4802ade.7e49e54",
+      "name": "Take Photo",
+      "topic": "",
+      "payload": "",
+      "payloadType": "date",
+      "repeat": "",
+      "crontab": "",
+      "once": false,
+      "onceDelay": 0.1,
+      "x": 160,
+      "y": 260,
+      "wires": [
+          [
+              "8ee4aff8.c8b1e"
+          ]
+      ]
+  },
+  {
+      "id": "6bee7249.4a281c",
+      "type": "switch",
+      "z": "4802ade.7e49e54",
+      "name": "",
+      "property": "payload",
+      "propertyType": "msg",
+      "rules": [
+          {
+              "t": "eq",
+              "v": "1",
+              "vt": "str"
+          }
+      ],
+      "checkall": "true",
+      "repair": false,
+      "outputs": 1,
+      "x": 330,
+      "y": 120,
+      "wires": [
+          [
+              "8ee4aff8.c8b1e"
+          ]
+      ]
+  },
+  {
+      "id": "d5b62afe.3e4398",
+      "type": "tf-function",
+      "z": "4802ade.7e49e54",
+      "name": "pre-processing",
+      "func": "const image = tf.tidy(() => {\n  return tf.node.decodeImage(msg.payload, 3).expandDims(0);\n});\n\nreturn {payload: { image_tensor: image } };",
+      "outputs": 1,
+      "noerr": 0,
+      "x": 220,
+      "y": 560,
+      "wires": [
+          [
+              "414015ec.127fac"
+          ]
+      ]
+  },
+  {
+      "id": "ebf49eab.6d3d6",
+      "type": "function",
+      "z": "4802ade.7e49e54",
+      "name": "",
+      "func": "let queue = flow.get('queue');\nif (queue === undefined) {\n    queue = [];\n    flow.set('queue', queue);\n}\n\nif (msg.complete === undefined) {\n    queue.push(msg.payload);\n    node.done();\n} else {\n    const image = queue.shift();\n    node.send(\n        {\n            payload: {\n                objects: msg.payload,\n                image: image\n            }\n        });\n}",
+      "outputs": 1,
+      "noerr": 0,
+      "x": 555,
+      "y": 260,
+      "wires": [
+          [
+              "9b49690a.8db0c8"
+          ]
+      ],
+      "icon": "node-red/batch.svg",
+      "l": false
+  },
+  {
+      "id": "5f1d0ec3.602e",
+      "type": "rpi-gpio in",
+      "z": "4802ade.7e49e54",
+      "name": "",
+      "pin": "8",
+      "intype": "tri",
+      "debounce": "2000",
+      "read": false,
+      "x": 130,
+      "y": 120,
+      "wires": [
+          [
+              "6bee7249.4a281c"
+          ]
+      ]
+  },
+  {
+      "id": "414015ec.127fac",
+      "type": "tf-model",
+      "z": "4802ade.7e49e54",
+      "modelURL": "https://storage.googleapis.com/tfjs-models/savedmodel/ssdlite_mobilenet_v2/model.json",
+      "outputNode": "",
+      "name": "TFJS Model",
+      "x": 390,
+      "y": 560,
+      "wires": [
+          [
+              "356ba03f.8ff9f"
+          ]
+      ]
+  },
+  {
+      "id": "9b49690a.8db0c8",
+      "type": "bbox-image",
+      "z": "4802ade.7e49e54",
+      "name": "bounding-box",
+      "x": 700,
+      "y": 260,
+      "wires": [
+          [
+              "949891b.bac247"
+          ]
+      ]
+  },
+  {
+      "id": "b1406ed6.e1bdb",
+      "type": "change",
+      "z": "4802ade.7e49e54",
+      "name": "Set Complete",
+      "rules": [
+          {
+              "t": "set",
+              "p": "complete",
+              "pt": "msg",
+              "to": "true",
+              "tot": "bool"
+          }
+      ],
+      "action": "",
+      "property": "",
+      "from": "",
+      "to": "",
+      "reg": false,
+      "x": 580,
+      "y": 420,
+      "wires": [
+          [
+              "ebf49eab.6d3d6"
+          ]
+      ]
+  },
+  {
+      "id": "356ba03f.8ff9f",
+      "type": "post-object-detection",
+      "z": "4802ade.7e49e54",
+      "classesURL": "https://s3.sjc.us.cloud-object-storage.appdomain.cloud/tfjs-cos/cocossd/classes.json",
+      "iou": "0.5",
+      "minScore": "0.5",
+      "name": "post-processing",
+      "x": 560,
+      "y": 560,
+      "wires": [
+          [
+              "b1406ed6.e1bdb",
+              "4f6c7ce7.4d2b24"
+          ]
+      ]
+  },
+  {
+      "id": "949891b.bac247",
+      "type": "image viewer",
+      "z": "4802ade.7e49e54",
+      "name": "",
+      "width": "280",
+      "data": "payload",
+      "dataType": "msg",
+      "x": 890,
+      "y": 80,
+      "wires": [
+          []
+      ]
+  },
+  {
+      "id": "4f6c7ce7.4d2b24",
+      "type": "function",
+      "z": "4802ade.7e49e54",
+      "name": "isObjectDetected",
+      "func": "let objectDetected = false;\n\nfor (let object of msg.payload) {\n    if (object.className === 'person') {\n        objectDetected = true;\n        break;\n    }\n}\nmsg.payload = objectDetected;\nconsole.log(msg.payload);\nreturn msg;",
+      "outputs": 1,
+      "noerr": 0,
+      "x": 810,
+      "y": 560,
+      "wires": [
+          [
+              "b41cf97b.41b578"
+          ]
+      ]
+  },
+  {
+      "id": "460a6801.197388",
+      "type": "exec",
+      "z": "4802ade.7e49e54",
+      "command": "aplay",
+      "addpay": false,
+      "append": "/home/pi/Downloads/access-granted.wav",
+      "useSpawn": "false",
+      "timer": "",
+      "oldrc": false,
+      "name": "Access Granted Sound",
+      "x": 1070,
+      "y": 380,
+      "wires": [
+          [],
+          [],
+          []
+      ]
+  },
+  {
+      "id": "b41cf97b.41b578",
+      "type": "switch",
+      "z": "4802ade.7e49e54",
+      "name": "",
+      "property": "payload",
+      "propertyType": "msg",
+      "rules": [
+          {
+              "t": "true"
+          },
+          {
+              "t": "else"
+          }
+      ],
+      "checkall": "true",
+      "repair": false,
+      "outputs": 2,
+      "x": 870,
+      "y": 420,
+      "wires": [
+          [
+              "460a6801.197388"
+          ],
+          [
+              "31273787.329878"
+          ]
+      ]
+  },
+  {
+      "id": "31273787.329878",
+      "type": "exec",
+      "z": "4802ade.7e49e54",
+      "command": "aplay",
+      "addpay": false,
+      "append": "/home/pi/Downloads/alarm.wav",
+      "useSpawn": "false",
+      "timer": "",
+      "oldrc": false,
+      "name": "Alarm Sound",
+      "x": 1030,
+      "y": 460,
+      "wires": [
+          [],
+          [],
+          []
+      ]
+  }
+]
